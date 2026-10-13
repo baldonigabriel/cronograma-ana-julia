@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6a3fd1">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Cronograma OAB · Ana Júlia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: app de estudo — barra de navegação (topo no desktop, base no celular), uma tela por vez: Dia, Jornada, Desempenho, Lei seca, Método */
+:root{
+  --bg:#efe9f8; --surface:#ffffff; --sunk:#f6f2fc; --ink:#221a33; --muted:#6c6280; --line:#e0d7ee;
+  --accent:#6a3fd1; --accent-ink:#ffffff; --accent-soft:#e7dcfb;
+  --done:#21875f; --done-soft:#dcf1e7; --gold:#b27a14; --gold-soft:#f8ebd0; --sim:#c4513a; --sim-soft:#f9e1da;
+  --g1:#6a3fd1; --g2:#2b8a9e; --g3:#8d84a0;
+  --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r:16px; --shadow:0 1px 2px rgba(40,20,80,.06),0 6px 20px -10px rgba(40,20,80,.18);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17121f; --surface:#221b2e; --sunk:#1c1626; --ink:#efe9f8; --muted:#a79cba; --line:#352b45;
+  --accent:#a585ff; --accent-ink:#17121f; --accent-soft:#33264f;
+  --done:#5fcf9d; --done-soft:#1d3a2f; --gold:#e8b65a; --gold-soft:#3b2f1a; --sim:#f08a72; --sim-soft:#40231d;
+  --g1:#a585ff; --g2:#5bbfd2; --g3:#8d84a0; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#17121f; --surface:#221b2e; --sunk:#1c1626; --ink:#efe9f8; --muted:#a79cba; --line:#352b45;
+  --accent:#a585ff; --accent-ink:#17121f; --accent-soft:#33264f;
+  --done:#5fcf9d; --done-soft:#1d3a2f; --gold:#e8b65a; --gold-soft:#3b2f1a; --sim:#f08a72; --sim-soft:#40231d;
+  --g1:#a585ff; --g2:#5bbfd2; --g3:#8d84a0; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6); color-scheme:dark }
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-family:var(--display);line-height:1.15;text-wrap:balance}
+p{margin:0;max-width:62ch}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+/* Barra superior */
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.appbar-in{max-width:1000px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:15px;flex:0 0 auto}
+.brand b{font-family:var(--display);font-size:18px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;font-size:12px;color:var(--muted);line-height:1.2}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px;font-weight:600;font-size:14px;color:var(--muted)}
+.tab svg{width:18px;height:18px}
+.tab:hover{color:var(--ink);background:var(--surface)}
+.tab[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
+.countdown{display:flex;align-items:baseline;gap:6px;padding:6px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line);white-space:nowrap}
+.countdown b{font-family:var(--mono);font-size:15px;color:var(--accent)}
+.countdown span{font-size:12px;color:var(--muted)}
+
+main{max-width:1000px;margin:0 auto;padding-inline:20px;padding-block:24px 64px}
+.view{display:grid;gap:20px}
+.view[hidden]{display:none!important}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-width:0}
+.title-row{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:10px 16px}
+.title-row h2{font-size:clamp(24px,4vw,32px);font-weight:800;letter-spacing:-.015em}
+
+/* Faixa da semana */
+.weekstrip{display:grid;grid-template-columns:40px 1fr 40px;gap:8px;align-items:center}
+.arrow{width:40px;height:40px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
+.arrow:hover{border-color:var(--accent);color:var(--accent)}
+.arrow:disabled{opacity:.35;cursor:default}
+.arrow svg{width:18px;height:18px}
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.dpill{display:grid;justify-items:center;gap:3px;padding:8px 2px 9px;border-radius:12px;border:1px solid transparent;position:relative}
+.dpill .dw{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dpill .dn{font-family:var(--display);font-weight:800;font-size:19px;line-height:1}
+.dpill .st{width:6px;height:6px;border-radius:99px;background:var(--line)}
+.dpill .st.part{background:var(--accent)}
+.dpill .st.full{background:var(--done)}
+.dpill:hover{background:var(--surface)}
+.dpill.sel{background:var(--accent);color:var(--accent-ink)}
+.dpill.sel .dw{color:inherit;opacity:.8}
+.dpill.sel .st{background:var(--accent-ink)}
+.dpill.today:not(.sel){border-color:var(--accent)}
+.dpill .tag{position:absolute;top:4px;right:6px;width:5px;height:5px;border-radius:99px}
+
+/* Cabeçalho do dia */
+.dayhead{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.dayhead h2{font-size:clamp(26px,5vw,36px);font-weight:800;letter-spacing:-.02em}
+.dayhead .sub{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--sunk);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.gold{background:var(--gold-soft);color:var(--gold);border-color:transparent}
+.chip.sim{background:var(--sim-soft);color:var(--sim);border-color:transparent}
+.chip.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.chip.ok{background:var(--done-soft);color:var(--done);border-color:transparent}
+.ring{position:relative;display:grid;place-items:center}
+.ring svg{display:block;transform:rotate(-90deg)}
+.ring .rt{position:absolute;text-align:center;line-height:1.1}
+.ring .rt b{font-family:var(--display);font-weight:800;font-size:22px;display:block}
+.ring .rt span{font-size:11px;color:var(--muted)}
+.ring circle{fill:none}
+.ring .bgc{stroke:var(--line)}
+.ring .fgc{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.2,.8,.2,1)}
+.ring.full .fgc{stroke:var(--done)}
+
+/* Metas */
+.daygrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+.goals{display:grid;gap:12px}
+.goal{display:grid;gap:12px}
+.goal-top{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.sicon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff;flex:0 0 auto}
+.goal h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-top:2px}
+.goal .sname{font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.goal .ref{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+.goal.isdone h3{color:var(--muted)}
+.tasks{display:grid;gap:6px}
+.task{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);text-align:left;font-weight:600;font-size:14.5px;transition:background .15s,border-color .15s}
+.task:hover{border-color:var(--accent)}
+.task .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);display:grid;place-items:center;flex:0 0 auto;transition:all .15s}
+.task .box svg{width:14px;height:14px;opacity:0;transform:scale(.5);transition:all .15s;color:var(--surface)}
+.task[aria-checked="true"]{background:var(--done-soft);border-color:transparent;color:var(--ink)}
+.task[aria-checked="true"] .box{background:var(--done);border-color:var(--done)}
+.task[aria-checked="true"] .box svg{opacity:1;transform:scale(1)}
+.task[aria-checked="true"] .tl{text-decoration:line-through;text-decoration-color:var(--done);text-decoration-thickness:2px;opacity:.75}
+.task .tmeta{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500}
+details.focus{border-radius:12px;background:var(--gold-soft);padding:10px 12px}
+details.focus summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--gold);list-style:none;display:flex;align-items:center;gap:8px}
+details.focus summary::-webkit-details-marker{display:none}
+details.focus summary::after{content:"+";margin-left:auto;font-family:var(--mono);font-size:16px}
+details.focus[open] summary::after{content:"–"}
+details.focus ul{margin:10px 0 2px;padding-left:18px;display:grid;gap:3px;font-size:14px}
+details.focus ul li::marker{color:var(--gold)}
+
+/* Coluna lateral */
+.side{display:grid;gap:12px;position:sticky;top:86px}
+.counter{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.counter .val{text-align:center}
+.counter .val b{display:block;font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.counter .val span{font-size:12px;color:var(--muted)}
+.step{min-width:44px;height:40px;padding:0 10px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-family:var(--mono);font-weight:700;font-size:13px}
+.step:hover{border-color:var(--accent);color:var(--accent)}
+.step.plus{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.steps{display:flex;gap:6px}
+.sep{height:1px;background:var(--line);margin:4px 0}
+
+.timer{display:grid;gap:12px}
+.tdisp{font-family:var(--mono);font-weight:700;font-size:42px;letter-spacing:-.02em;text-align:center;line-height:1}
+.tbar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.tbar span{display:block;height:100%;width:0;background:var(--accent);transition:width 1s linear}
+.presets{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.preset{padding:5px 10px;border-radius:99px;border:1px solid var(--line);font-size:13px;font-weight:600;background:var(--sunk)}
+.preset[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.tbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{height:44px;border-radius:12px;font-weight:700;font-size:14.5px;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.tnote{font-size:12.5px;color:var(--muted);text-align:center;min-height:1.5em}
+
+/* Jornada */
+.journey{display:grid;gap:8px}
+.jrow{display:grid;grid-template-columns:52px repeat(7,minmax(0,1fr)) minmax(0,1.4fr);gap:6px;align-items:center}
+.jrow .wl{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted)}
+.jrow .wl.now{color:var(--accent)}
+.jcell{aspect-ratio:1;max-width:100%;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative;font-family:var(--display);font-weight:700;font-size:14px;overflow:hidden}
+.jcell .fill{position:absolute;inset:auto 0 0 0;background:var(--accent-soft);height:0}
+.jcell span{position:relative}
+.jcell.full{background:var(--done);border-color:var(--done);color:var(--surface)}
+.jcell.full .fill{display:none}
+.jcell.today{box-shadow:0 0 0 2.5px var(--accent)}
+.jcell.past:not(.full){border-style:dashed}
+.jcell .mk{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:99px}
+.jcell:hover{border-color:var(--accent)}
+.jrow .subjs{font-size:12.5px;color:var(--muted);line-height:1.35;padding-left:6px;min-width:0}
+.jhead{display:grid;grid-template-columns:52px repeat(7,minmax(0,1fr)) minmax(0,1.4fr);gap:6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
+
+/* Desempenho */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{display:grid;gap:4px}
+.kpi b{font-family:var(--display);font-weight:800;font-size:30px;line-height:1.05}
+.kpi small{font-size:12.5px;color:var(--muted)}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.chart .gl{stroke:var(--line)}
+.sbars{display:grid;gap:8px}
+.sbar{display:grid;grid-template-columns:minmax(110px,170px) 1fr 54px;gap:10px;align-items:center;font-size:14px}
+.sbar .tr{height:10px;border-radius:99px;background:var(--sunk);border:1px solid var(--line);overflow:hidden}
+.sbar .tr span{display:block;height:100%;border-radius:99px}
+.sbar .pc{font-family:var(--mono);font-size:12.5px;color:var(--muted);text-align:right}
+.sbar.out{color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.card .hint{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+
+/* Lei seca */
+.laws{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.law-top{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:12px}
+.law-top h3{margin:0;font-size:17px}
+.blocks{display:flex;flex-wrap:wrap;gap:5px}
+.blk{padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--sunk);font-family:var(--mono);font-size:12px;font-weight:500;color:var(--muted)}
+.blk:hover{border-color:var(--accent);color:var(--ink)}
+.blk[aria-pressed="true"]{background:var(--done);border-color:var(--done);color:var(--surface)}
+
+/* Método */
+.method{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.method .card{display:grid;gap:8px;align-content:start}
+.method .big{font-family:var(--display);font-weight:800;font-size:24px;color:var(--accent)}
+.method p{font-size:14.5px;color:var(--muted)}
+.setting{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.setting input[type=date]{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);padding:0 10px;font:inherit;color:var(--ink)}
+textarea{width:100%;min-height:70px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);padding:10px;font-family:var(--mono);font-size:12px;color:var(--ink);resize:vertical}
+.credit{font-size:13px;color:var(--muted);text-align:center;padding-top:8px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;pointer-events:none;transition:all .25s;z-index:40;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:860px){
+  .daygrid,.two{grid-template-columns:1fr}
+  .side{position:static}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .jrow,.jhead{grid-template-columns:40px repeat(7,minmax(0,1fr))}
+  .jrow .subjs,.jhead .sh{display:none}
+}
+@media (max-width:720px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;margin:0;justify-content:space-around;gap:0;background:var(--surface);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:30}
+  .tab{flex-direction:column;gap:2px;font-size:11px;padding:6px 4px;flex:1}
+  .tab svg{width:22px;height:22px}
+  main{padding-bottom:110px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .countdown{margin-left:auto}
+  .dayhead{grid-template-columns:1fr auto}
+  .dpill .dn{font-size:16px}
+  .sbar{grid-template-columns:100px 1fr 44px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-in">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">RF</div>
+      <div><b>Reta Final</b><small>OAB · 1ª fase</small></div>
+    </div>
+    <nav class="tabs" aria-label="Seções">
+      <button class="tab" data-view="dia" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg>Dia</button>
+      <button class="tab" data-view="jornada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Jornada</button>
+      <button class="tab" data-view="desempenho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Desempenho</button>
+      <button class="tab" data-view="lei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7M8 11h7"/></svg>Lei seca</button>
+      <button class="tab" data-view="metodo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Método</button>
+    </nav>
+    <div class="countdown" title="Prova: domingo, 10/01/2027, 13h às 18h"><b id="cd">—</b><span>dias p/ prova</span></div>
+  </div>
+</header>
+
+<main>
+  <!-- DIA -->
+  <section class="view" id="v-dia" aria-label="Dia de estudo">
+    <div class="weekstrip">
+      <button class="arrow" id="prevW" aria-label="Semana anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button>
+      <div class="strip" id="strip"></div>
+      <button class="arrow" id="nextW" aria-label="Próxima semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+    </div>
+    <div class="dayhead" id="dayhead"></div>
+    <div class="daygrid">
+      <div class="goals" id="goals"></div>
+      <aside class="side">
+        <div class="card">
+          <div class="label" style="margin-bottom:10px">Fechamento do dia</div>
+          <div class="counter">
+            <button class="step" data-inc="q" data-v="-5" aria-label="Menos 5 questões">−5</button>
+            <div class="val"><b class="mono" id="qVal">0</b><span>questões</span></div>
+            <div class="steps"><button class="step plus" data-inc="q" data-v="5" aria-label="Mais 5 questões">+5</button><button class="step plus" data-inc="q" data-v="20" aria-label="Mais 20 questões">+20</button></div>
+          </div>
+          <div class="sep" style="margin:14px 0"></div>
+          <div class="counter">
+            <button class="step" data-inc="m" data-v="-15" aria-label="Menos 15 minutos">−15</button>
+            <div class="val"><b class="mono" id="mVal">0h</b><span>tempo líquido</span></div>
+            <div class="steps"><button class="step plus" data-inc="m" data-v="15" aria-label="Mais 15 minutos">+15</button><button class="step plus" data-inc="m" data-v="60" aria-label="Mais 60 minutos">+60</button></div>
+          </div>
+        </div>
+        <div class="card timer">
+          <div class="label">Sessão de estudo</div>
+          <div class="presets" id="presets">
+            <button class="preset" data-min="70">1h10</button>
+            <button class="preset" data-min="50" aria-pressed="true">50 min</button>
+            <button class="preset" data-min="30">30 min</button>
+            <button class="preset" data-min="15">15 min</button>
+          </div>
+          <div class="tdisp" id="tDisp" aria-live="off">50:00</div>
+          <div class="tbar"><span id="tBar"></span></div>
+          <div class="tbtns">
+            <button class="btn" id="tStart">Iniciar</button>
+            <button class="btn ghost" id="tDone" disabled>Concluir</button>
+          </div>
+          <div class="tnote" id="tNote">Ao concluir, o tempo entra no dia que está aberto.</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- JORNADA -->
+  <section class="view" id="v-jornada" hidden aria-label="Jornada">
+    <div class="title-row">
+      <div><div class="label" id="jRange">10 semanas</div><h2>Jornada de 70 dias</h2></div>
+      <span class="chip acc" id="jChip">—</span>
+    </div>
+    <div class="card">
+      <div class="journey" id="journey"></div>
+      <div class="legend" style="margin-top:16px">
+        <span><i style="background:var(--done);border-color:var(--done)"></i>Dia completo</span>
+        <span><i style="background:linear-gradient(to top,var(--accent-soft) 50%,var(--surface) 50%)"></i>Em andamento</span>
+        <span><i style="border-style:dashed"></i>Passou e ficou pendente</span>
+        <span><i style="background:var(--gold);border-color:var(--gold);border-radius:99px;width:8px;height:8px"></i>Ética</span>
+        <span><i style="background:var(--sim);border-color:var(--sim);border-radius:99px;width:8px;height:8px"></i>Simulado</span>
+      </div>
+    </div>
+    <p class="muted" style="font-size:14px">Toque em um dia para abrir as metas dele.</p>
+  </section>
+
+  <!-- DESEMPENHO -->
+  <section class="view" id="v-desempenho" hidden aria-label="Desempenho">
+    <div class="title-row"><div><div class="label">Reforçadores de estudo</div><h2>Seu desempenho</h2></div></div>
+    <div class="kpis">
+      <div class="card kpi"><span class="label">Metas</span><b class="mono" id="kG">0%</b><small id="kGs">do plano concluído</small></div>
+      <div class="card kpi"><span class="label">Questões</span><b class="mono" id="kQ">0</b><small id="kQs">resolvidas</small></div>
+      <div class="card kpi"><span class="label">Horas líquidas</span><b class="mono" id="kH">0</b><small id="kHs">estudadas</small></div>
+      <div class="card kpi"><span class="label">Sequência</span><b class="mono" id="kS">0</b><small id="kSs">dias seguidos</small></div>
+    </div>
+    <div class="card chart">
+      <h3>Questões por semana</h3>
+      <p class="hint">Meta de referência: 20 questões por matéria, cerca de 200 por semana.</p>
+      <div id="wkChart"></div>
+    </div>
+    <div class="two">
+      <div class="card"><h3>Avanço por matéria</h3><p class="hint">Metas concluídas em cada matéria do cronograma.</p><div class="sbars" id="subjBars"></div></div>
+      <div class="card"><h3>Peso na prova</h3><p class="hint">Questões por disciplina nas 80 da 1ª fase.</p><div class="sbars" id="distBars"></div>
+        <p class="hint" style="margin:14px 0 0">Filosofia, Direitos Humanos, Internacional e ECA (8 questões) não estão no cronograma. Encaixe nos domingos de revisão.</p></div>
+    </div>
+  </section>
+
+  <!-- LEI SECA -->
+  <section class="view" id="v-lei" hidden aria-label="Lei seca">
+    <div class="title-row"><div><div class="label">A FGV cobra a literalidade</div><h2>Lei seca todo dia</h2></div><span class="chip acc" id="lChip">0%</span></div>
+    <p class="muted">Separe até uma hora por dia. Toque em cada bloco de artigos depois de ler.</p>
+    <div class="laws" id="laws"></div>
+  </section>
+
+  <!-- MÉTODO -->
+  <section class="view" id="v-metodo" hidden aria-label="Método">
+    <div class="title-row"><div><div class="label">Como usar o plano</div><h2>Método</h2></div></div>
+    <div class="method">
+      <div class="card"><span class="big">3 metas</span><h3>Estrutura do dia</h3><p>Duas matérias e uma revisão. Em cada matéria, leia os artigos indicados e resolva 20 questões da FGV.</p></div>
+      <div class="card"><span class="big">2 × 1h10</span><h3>Sessões</h3><p>Manhã e tarde, com 15 min de intervalo. Com pouco tempo, faça blocos de 15 a 30 min espalhados pelo dia.</p></div>
+      <div class="card"><span class="big">Questões</span><h3>Estudo reverso</h3><p>Vá direto às questões e marque no vade mecum os artigos cobrados. Leia o comentário de toda questão errada. Volte à teoria só quando errar muito.</p></div>
+      <div class="card"><span class="big">4 páginas</span><h3>Caderno de erros</h3><p>Anote dicas e pegadinhas sem organizar por matéria. Releia algumas páginas por dia, destacando as palavras-chave.</p></div>
+      <div class="card"><span class="big">Domingo</span><h3>Revisão semanal</h3><p>De 5 a 10 questões por assunto da semana. Matéria finalizada continua com questões no filtro: matéria, edital completo, banca FGV.</p></div>
+      <div class="card"><span class="big">Semana 3+</span><h3>Simulado OAB</h3><p>Todo domingo, prova completa no horário real, das 13h às 18h. Treina o tempo e o emocional.</p></div>
+    </div>
+    <div class="card" style="display:grid;gap:14px">
+      <h3>Ajustes</h3>
+      <div class="setting"><label for="startDate" style="font-weight:600">Primeiro dia do plano (segunda-feira)</label><input type="date" id="startDate"></div>
+      <div class="sep"></div>
+      <div style="display:grid;gap:10px">
+        <div><b>Trocar de aparelho</b><p class="muted" style="font-size:14px">O progresso fica salvo neste navegador. Copie o código aqui, abra o link no outro aparelho e cole em Restaurar.</p></div>
+        <textarea id="bkText" aria-label="Código de backup" placeholder="Cole aqui o código de backup"></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bkCopy" style="padding:0 16px">Copiar código</button><button class="btn ghost" id="bkLoad" style="padding:0 16px">Restaurar</button></div>
+      </div>
+    </div>
+    <p class="credit">Cronograma de Alana Fécca (@alanaedireito). Confira o calendário oficial no site do Exame de Ordem.</p>
+  </section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const EXAM=new Date(2027,0,10), DEFAULT_START="2026-10-19", KEY="oab-reta-final-app-v1";
+
+const GROUP={"Ética":0,"Constitucional":1,"Civil":1,"Processo Civil":1,"Penal":1,"Processo Penal":1,"Administrativo":2,"Trabalho":2,"Processo do Trabalho":2,"Tributário":2,"Empresarial":2,"Ambiental":3,"Consumidor":3,"Previdenciário":3,"Financeiro":3,"Eleitoral":3};
+const ABBR={"Ética":"ÉT","Constitucional":"CF","Civil":"CC","Processo Civil":"PC","Penal":"CP","Processo Penal":"PP","Administrativo":"AD","Trabalho":"TR","Processo do Trabalho":"PT","Tributário":"TB","Empresarial":"EM","Ambiental":"AM","Consumidor":"CD","Previdenciário":"PV","Financeiro":"FI","Eleitoral":"EL"};
+const gcol=s=>["var(--gold)","var(--g1)","var(--g2)","var(--g3)"][GROUP[s]];
+const TASKS={L:["Leitura da lei","20 questões"],T:["Teoria","20 questões"],R:["Revisar material","Questões"]};
+
+const E1=["sigilo absoluto × relativo","exame de autos sem procuração","inviolabilidade do escritório","comunicação com cliente preso","sala de Estado-Maior","quem pode e quem não pode fazer consultoria jurídica","mediação e conciliação não são privativas","Juizado Especial sem advogado","investigação defensiva"];
+const E2=["requisitos do art. 8º","incompatibilidade × impedimento","cancelamento × licenciamento","quem pode ser sócio","proibição de nome fantasia","registro na OAB, não na Junta","sociedade unipessoal","responsabilidade ilimitada"];
+const E3=["jornada do advogado empregado","honorários pertencem ao advogado","cumulatividade de honorários","natureza alimentar dos honorários","incompatibilidade × impedimento","cargos incompatíveis clássicos","independência técnica do advogado empregado"];
+const E4=["art. 34: infrações","art. 35: sanções","censura é a regra","suspensão: reincidência ou gravidade","exclusão: casos extremos","prescrição em 5 anos"];
+const E5=["principais órgãos, atribuições e composição"];
+const E6=["sistema recursal","Regulamento Geral: arts. 14, 18 e 19","última leitura do Estatuto na semana da prova, com foco nas mudanças recentes"];
+const CED=["deveres do advogado, sobretudo com o cliente","dever de sigilo profissional","publicidade e marketing digital","honorários","Tribunal de Ética e Disciplina","contratação para serviço profissional (art. 48)"];
+const LIC=["modalidades","critérios de julgamento","dispensa × inexigibilidade","ordem das fases","princípios","sanções","habilitação"];
+
+const PLAN=[
+ [[["Constitucional","Direitos e garantias fundamentais","Arts. 1º–17 CF","L"],["Penal","Parte geral","Arts. 1º–31 CP","L"]],
+  [["Administrativo","Responsabilidade civil do Estado","","T"],["Civil","Parte geral","Arts. 1º–69 CC","L"]],
+  [["Processo Civil","Parte geral","Arts. 1º–20 CPC","L"],["Processo Penal","Processo em geral e inquérito policial","Arts. 1º–23 CPP","L"]],
+  [["Constitucional","Meio ambiente","Arts. 225–231 CF","L"],["Penal","Parte geral","Arts. 32–106 CP","L"]],
+  [["Administrativo","Administração pública","Arts. 37–41 CF","L"],["Processo Penal","Ação penal","Arts. 24–68 CPP","L"]],
+  [["Ética","Atividade de advocacia e direitos do advogado","Arts. 1º–7º-B EOAB","L",E1]]],
+ [[["Constitucional","Organização do Estado","Arts. 18–36 CF","L"],["Penal","Parte geral","Arts. 107–120 CP","L"]],
+  [["Administrativo","Improbidade administrativa","Lei 8.429/92","L"],["Civil","Parte geral","Arts. 70–103 CC","L"]],
+  [["Processo Civil","Parte geral","Arts. 42–69 CPC","L"],["Processo Penal","Da prova","Arts. 155–157, 185–192 e 201 CPP","L"]],
+  [["Constitucional","Habeas data e súmula vinculante","Leis 9.507/97 e 11.417/06","L"],["Penal","Crimes contra a pessoa","Foco nos arts. 121–129 CP","L"]],
+  [["Administrativo","Poderes da administração","Atenção ao poder de polícia","L"],["Processo Penal","Partes","Arts. 251–273 CPP","L"]],
+  [["Ética","Inscrição e sociedade de advogados","Arts. 8º–17-B EOAB","L",E2]]],
+ [[["Constitucional","Súmulas vinculantes","","L"],["Penal","Crimes contra a honra e a liberdade","Arts. 138–145 e 146–154-B CP","L"]],
+  [["Administrativo","Organização da administração","Autarquia, empresa pública, SEM e agências","L"],["Civil","Parte geral","Arts. 104–211 CC","L"]],
+  [["Processo Civil","Parte geral","Arts. 70–97 CPC","L"],["Processo Penal","Prisão","Arts. 282–372 CPP","L"]],
+  [["Constitucional","Poder Legislativo","Arts. 44–91 CF · foco: 49, 53–69, 84 e 85","L"],["Penal","Crimes contra o patrimônio","Foco: 155–159, 163, 171, 181–183 CP","L"]],
+  [["Trabalho","Relação de emprego","Arts. 2º–12-A CLT","L"],["Processo Penal","Sentença e processo","Arts. 381–405 CPP","L"]],
+  [["Ética","Advogado empregado, honorários e incompatibilidades","Arts. 18–30 EOAB","L",E3]]],
+ [[["Constitucional","Poder Judiciário e funções essenciais","Arts. 92–135 CF · foco no quinto constitucional","L"],["Penal","Crimes contra a dignidade sexual","Arts. 213–218-C, 225–226 CP","L"]],
+  [["Administrativo","Licitações","Lei 14.133/21","L",LIC],["Civil","Obrigações I","Arts. 233–285 CC","L"]],
+  [["Processo Civil","Parte geral","Arts. 103–148 CPC","L"],["Processo Penal","Tribunal do Júri","Arts. 406–428 e 474-A CPP","L"]],
+  [["Constitucional","Mandado de segurança","Lei 12.016/09","L"],["Penal","Crimes contra a administração pública","Arts. 312–359-H CP","L"]],
+  [["Trabalho","Duração do trabalho","Arts. 58–75-E CLT","L"],["Processo Penal","Processos especiais","Arts. 513–518 CPP","L"]],
+  [["Ética","Infrações e sanções disciplinares","Arts. 34–43 EOAB","L",E4]]],
+ [[["Constitucional","Controle de constitucionalidade","Leis 9.868/99 e 9.882/99","L"],["Penal","Execução penal","Progressão, regressão, direitos do preso e remição","L"]],
+  [["Administrativo","Concessão e permissão","Lei 8.987/95 e art. 175 CF · foco: 1º–15, 25, 35–40","L"],["Civil","Obrigações II","Arts. 305–333 CC","L"]],
+  [["Processo Civil","Atos processuais","Arts. 188–283 CPC","L"],["Processo Penal","Nulidades","Arts. 563–573 CPP","L"]],
+  [["Tributário","Princípios constitucionais tributários","","L"],["Empresarial","Direito de empresa e sociedade","Foco: arts. 966–996 CC","L"]],
+  [["Trabalho","Férias","Arts. 129–145 CLT","L"],["Processo Penal","Recursos","Arts. 574–631 e 798-A CPP","L"]],
+  [["Ética","Estrutura da OAB","Arts. 44–67 EOAB","L",E5]]],
+ [[["Constitucional","Revisão","Material produzido por você","R"],["Penal","Revisão","Material produzido por você","R"],["Processo do Trabalho","Justiça do Trabalho","Arts. 111–116 CF e 643–653 CLT","L"]],
+  [["Administrativo","Parceria público-privada","Lei 11.079/04 · arts. 1º–12, ênfase 1º–5º","L"],["Civil","Obrigações III","Arts. 389–420 CC","L"]],
+  [["Processo Civil","Tutela e processo de conhecimento","Arts. 294–386 CPC","L"],["Processo Penal","Revisão","Material produzido por você","R"]],
+  [["Tributário","Imunidades tributárias","","L"],["Empresarial","Sociedades","Arts. 1.085 e 1.126–1.168 CC","L"]],
+  [["Trabalho","Trabalho da mulher e do menor","Arts. 372–441 CLT","L"],["Ambiental","Política Nacional do Meio Ambiente","APP × reserva legal; responsabilidade penal da PJ e civil por risco integral","L"]],
+  [["Ética","Processo na OAB","Arts. 68–77 EOAB","L",E6]]],
+ [[["Constitucional","Revisão","Material produzido por você","R"],["Penal","Revisão","Material produzido por você","R"],["Processo do Trabalho","Processo judiciário do trabalho","Arts. 763–901 CLT","L"]],
+  [["Administrativo","Revisão","Material produzido por você","R"],["Civil","Responsabilidade civil e sucessões I","Art. 927 e arts. 1.784–1.790 CC","L"]],
+  [["Processo Civil","Sentença","Arts. 485–519 CPC","L"],["Processo Penal","Revisão","Material produzido por você","R"],["Consumidor","Leitura do CDC","Foco: arts. 1º–3º e 6º–54-G","L"]],
+  [["Tributário","CTN I","Arts. 1º–8º, 18-A e 77–82 CTN","L"],["Empresarial","Títulos de crédito","","L"]],
+  [["Trabalho","Contrato de trabalho e greve","Arts. 442–510-D e 543 CLT; Lei 7.783/89","L"],["Ambiental","Ação civil pública e ação popular","","L"]],
+  [["Ética","Código de Ética e Disciplina","63 artigos; foque nos temas abaixo","L",CED]]],
+ [[["Constitucional","Revisão","Material produzido por você","R"],["Penal","Revisão","Material produzido por você","R"],["Processo do Trabalho","Revisão","Material produzido por você","R"],["Financeiro","Finanças públicas","Arts. 163–169 CF; Lei 4.320/64 arts. 9º–22 e 34–74","L"]],
+  [["Administrativo","Revisão","Material produzido por você","R"],["Civil","Sucessões II","Arts. 1.829–1.861 CC","L"],["Previdenciário","Seguridade e custeio","Arts. 193–194 CF; Lei 8.212/91 arts. 1º–4º, 12–15 e 28","L"]],
+  [["Processo Civil","Execução","Arts. 771–796 CPC","L"],["Processo Penal","Revisão","Material produzido por você","R"],["Eleitoral","Inelegibilidades e eleições","LC 64/90 e Lei 9.504/97","L"]],
+  [["Tributário","CTN II","Arts. 96–208 CTN","L"],["Empresarial","Revisão","Material produzido por você","R"]],
+  [["Trabalho","Revisão","Material produzido por você","R"],["Constitucional","Revisão","Material produzido por você","R"]],
+  [["Ética","Código de Ética e Disciplina","Segunda leitura","L",CED]]],
+ [[["Constitucional","Revisão","Material produzido por você","R"],["Penal","Revisão","Material produzido por você","R"],["Processo do Trabalho","Revisão","Material produzido por você","R"]],
+  [["Administrativo","Revisão","Material produzido por você","R"],["Civil","Revisão","Material produzido por você","R"],["Previdenciário","Benefícios","Lei 8.213/91, do art. 9º em diante","L"]],
+  [["Processo Civil","Recursos e precedentes","Arts. 926–1.044 CPC","L"],["Processo Penal","Revisão","Material produzido por você","R"],["Eleitoral","Código Eleitoral","Lei 4.737/65","L"]],
+  [["Tributário","Tributação e orçamento","Arts. 145–156 CF","L"],["Empresarial","Revisão","Material produzido por você","R"]],
+  [["Trabalho","Revisão","Material produzido por você","R"],["Constitucional","Revisão","Material produzido por você","R"],["Financeiro","Responsabilidade fiscal","LC 101/2000 (LRF)","L"]],
+  [["Ética","Código de Ética e Disciplina","Terceira leitura","L",CED]]],
+ [[["Constitucional","Revisão","Material produzido por você","R"],["Penal","Revisão","Material produzido por você","R"],["Processo do Trabalho","Revisão","Material produzido por você","R"]],
+  [["Administrativo","Revisão","Material produzido por você","R"],["Civil","Revisão","Material produzido por você","R"],["Previdenciário","Revisão","Material produzido por você","R"]],
+  [["Processo Civil","Revisão","Material produzido por você","R"],["Processo Penal","Revisão","Material produzido por você","R"],["Eleitoral","Código Eleitoral","Lei 4.737/65","L"]],
+  [["Tributário","Revisão","Material produzido por você","R"],["Empresarial","Revisão","Material produzido por você","R"]],
+  [["Trabalho","Revisão","Material produzido por você","R"],["Constitucional","Revisão","Material produzido por você","R"],["Financeiro","Revisão","Material produzido por você","R"]],
+  [["Ética","Revisão final","Material produzido por você","R"]]]
+];
+
+const LAWS=[
+ ["Constituição Federal","CF",[1,11,21,31,41,51,61,71,81,91,101,111,121,131,141,151,161,171,181,191,201,211,221,231,241,251]],
+ ["Código Civil","CC",[1,138,286,421,565,710,854,981,1123,1260,1400,1543,1689,1829,1961,2047],["LINDB 1–30"]],
+ ["Código de Processo Civil","CPC",[1,70,139,212,284,369,451,513,599,674,746,814,879,966,1027,1073]],
+ ["Código Penal","CP",[1,31,61,91,121,136,166,196,211,226,241,271,301,331,346,361]],
+ ["Código de Processo Penal","CPP",[1,46,91,151,211,271,331,391,421,481,541,601,661,701,741,811]],
+ ["Lei de Licitações","14.133",[1,21,41,61,81,101,121,141,161,195]]
+];
+const LAW_LABEL={"854":"854–980-A"};
+const DIST=[["Ética Profissional",8,0],["Constitucional",6,1],["Civil",6,1],["Processo Civil",6,1],["Penal",6,1],["Processo Penal",6,1],["Administrativo",5,2],["Trabalho",5,2],["Processo do Trabalho",5,2],["Tributário",5,2],["Empresarial",4,2],["Ambiental",2,3],["Consumidor",2,3],["Previdenciário",2,3],["Financeiro",2,3],["Eleitoral",2,3],["Filosofia",2,3,1],["Direitos Humanos",2,3,1],["Internacional",2,3,1],["ECA",2,3,1]];
+
+/* Estado */
+let S={c:{},l:{},lg:{},start:DEFAULT_START};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const DOW=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"], DOWL=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+const startD=()=>{const [y,m,d]=S.start.split("-").map(Number);return new Date(y,m-1,d);};
+const dDate=n=>{const d=startD();d.setDate(d.getDate()+n-1);return d;};
+const fmt=d=>String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
+const todayN=()=>{const t=new Date();t.setHours(0,0,0,0);return Math.round((t-startD())/864e5)+1;};
+const clampN=n=>Math.min(70,Math.max(1,n));
+const wOf=n=>Math.floor((n-1)/7), dOf=n=>(n-1)%7;
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>';
+
+function dayItems(n){
+  const w=wOf(n),di=dOf(n),out=[];
+  if(di===6){out.push({id:`d${n}-rev`,s:null});if(w>=2)out.push({id:`d${n}-sim`,s:null});return out;}
+  PLAN[w][di].forEach((g,gi)=>TASKS[g[3]].forEach((_,ti)=>out.push({id:`d${n}-${gi}-${ti}`,s:g[0]})));
+  out.push({id:`d${n}-r`,s:null});return out;
+}
+const dayProg=n=>{const it=dayItems(n);return [it.filter(i=>S.c[i.id]).length,it.length];};
+const ALL=[];for(let n=1;n<=70;n++)ALL.push(...dayItems(n));
+const lg=n=>S.lg[n]||(S.lg[n]={q:0,m:0});
+const active=n=>{const v=S.lg[n];return (v&&((+v.q||0)+(+v.m||0)>0))||dayProg(n)[0]>0;};
+
+function ring(done,total,size=84,sw=8){
+  const r=(size-sw)/2,c=2*Math.PI*r,p=total?done/total:0;
+  return `<div class="ring${done===total&&total?" full":""}" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle class="bgc" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${sw}"/><circle class="fgc" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${sw}" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}"/></svg><div class="rt"><b class="mono">${done}/${total}</b><span>metas</span></div></div>`;
+}
+function smallRing(p,size=46,sw=5,col="var(--done)"){
+  const r=(size-sw)/2,c=2*Math.PI*r;
+  return `<div class="ring" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle class="bgc" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${sw}"/><circle class="fgc" style="stroke:${col}" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${sw}" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}"/></svg><div class="rt"><span class="mono" style="font-size:11px;color:var(--ink);font-weight:700">${Math.round(p*100)}%</span></div></div>`;
+}
+const task=(id,label,meta="")=>`<button class="task" role="checkbox" aria-checked="${!!S.c[id]}" data-k="${id}"><span class="box">${CHECK}</span><span class="tl">${esc(label)}</span>${meta?`<span class="tmeta">${meta}</span>`:""}</button>`;
+
+/* ---------- DIA ---------- */
+let sel=clampN(todayN());
+function renderStrip(){
+  const w=wOf(sel),tn=todayN();
+  $("prevW").disabled=w===0;$("nextW").disabled=w===9;
+  let h="";
+  for(let di=0;di<7;di++){
+    const n=w*7+di+1,d=dDate(n),[a,b]=dayProg(n);
+    const st=a===b?"full":a?"part":"";
+    const tag=di===5?"var(--gold)":(di===6&&w>=2)?"var(--sim)":"";
+    h+=`<button class="dpill${n===sel?" sel":""}${n===tn?" today":""}" data-day="${n}" aria-label="Dia ${n}, ${DOWL[d.getDay()]} ${fmt(d)}${n===tn?", hoje":""}" ${n===sel?'aria-current="date"':""}>${tag?`<span class="tag" style="background:${tag}"></span>`:""}<span class="dw">${DOW[d.getDay()]}</span><span class="dn mono">${d.getDate()}</span><span class="st ${st}"></span></button>`;
+  }
+  $("strip").innerHTML=h;
+}
+function renderDayHead(){
+  const n=sel,w=wOf(n),di=dOf(n),d=dDate(n),tn=todayN(),[a,b]=dayProg(n);
+  let rel=n===tn?"Hoje":n===tn+1?"Amanhã":n===tn-1?"Ontem":"";
+  const chips=[`<span class="chip acc">Semana ${w+1} de 10</span>`,`<span class="chip">Dia ${n} de 70</span>`];
+  if(di===5)chips.push(`<span class="chip gold">Ética · 8 questões na prova</span>`);
+  if(di===6)chips.push(w>=2?`<span class="chip sim">Revisão + simulado</span>`:`<span class="chip">Revisão semanal</span>`);
+  if(a===b)chips.push(`<span class="chip ok">Dia completo</span>`);
+  if(tn<1&&n===1)chips.push(`<span class="chip">Começa em ${1-tn} ${1-tn===1?"dia":"dias"}</span>`);
+  $("dayhead").innerHTML=`<div><div class="label">${rel?rel+" · ":""}${DOWL[d.getDay()]}, ${fmt(d)}</div><h2>${di===6?"Domingo de revisão":di===5?"Sábado de Ética":dayTitle(n)}</h2><div class="sub">${chips.join("")}</div></div>${ring(a,b)}`;
+}
+function dayTitle(n){return PLAN[wOf(n)][dOf(n)].map(g=>g[0]).join(" + ");}
+function renderGoals(){
+  const n=sel,w=wOf(n),di=dOf(n);let h="";
+  if(di===6){
+    h+=goalCard("var(--accent)","RV","Revisão semanal","Revise a semana ou termine o que ficou pendente","5 a 10 questões por assunto; releia o material nos pontos difíceis",task(`d${n}-rev`,"Revisão feita"),[`d${n}-rev`]);
+    if(w>=2)h+=goalCard("var(--sim)","SM","Simulado OAB","Prova completa: 80 questões em 5 horas","Use uma prova anterior da FGV, das 13h às 18h",task(`d${n}-sim`,"Simulado feito","+80 questões"),[`d${n}-sim`]);
+  }else{
+    PLAN[w][di].forEach((g,gi)=>{
+      const [s,t,ref,mode,focus]=g, ids=TASKS[mode].map((_,ti)=>`d${n}-${gi}-${ti}`);
+      let body=TASKS[mode].map((l,ti)=>task(ids[ti],l,ti===1&&mode!=="R"?"FGV":"")).join("");
+      let extra=focus?`<details class="focus"${s==="Ética"?" open":""}><summary>${s==="Ética"?"Pontos que a OAB ama":"Focar em"} · ${focus.length}</summary><ul>${focus.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></details>`:"";
+      h+=goalCard(gcol(s),ABBR[s],s,t,ref,body,ids,extra);
+    });
+    h+=`<div class="card goal" style="padding:14px 18px"><div class="tasks">${task(`d${n}-r`,"Revisar o dia e o caderno de erros","4 páginas")}</div></div>`;
+  }
+  $("goals").innerHTML=h;
+}
+function goalCard(col,ab,sname,title,ref,tasksHTML,ids,extra=""){
+  const done=ids.every(i=>S.c[i]);
+  return `<article class="card goal${done?" isdone":""}"><div class="goal-top"><div class="sicon" style="background:${col}">${esc(ab)}</div><div style="min-width:0"><div class="sname" style="color:${col}">${esc(sname)}</div><h3>${esc(title)}</h3>${ref?`<div class="ref">${esc(ref)}</div>`:""}</div></div>${extra}<div class="tasks">${tasksHTML}</div></article>`;
+}
+function renderLog(){const v=lg(sel);$("qVal").textContent=+v.q||0;$("mVal").textContent=fmtMin(+v.m||0);}
+const fmtMin=m=>m<60?m+"min":Math.floor(m/60)+"h"+(m%60?String(m%60).padStart(2,"0"):"");
+function renderDay(){renderStrip();renderDayHead();renderGoals();renderLog();}
+
+/* ---------- JORNADA ---------- */
+function renderJourney(){
+  const tn=todayN();
+  let h=`<div class="jhead"><span></span>${["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].map(d=>`<span>${d}</span>`).join("")}<span class="sh" style="text-align:left;padding-left:6px">Matérias</span></div>`;
+  for(let w=0;w<10;w++){
+    const subj=[...new Set(PLAN[w].flat().map(g=>g[0]))].map(s=>ABBR[s]).join(" · ");
+    const now=wOf(clampN(tn))===w&&tn>=1&&tn<=70;
+    h+=`<div class="jrow"><span class="wl${now?" now":""}">S${w+1}</span>`;
+    for(let di=0;di<7;di++){
+      const n=w*7+di+1,[a,b]=dayProg(n),p=a/b;
+      const mk=di===5?"var(--gold)":(di===6&&w>=2)?"var(--sim)":"";
+      const cls=["jcell",a===b?"full":"",n===tn?"today":"",n<tn?"past":""].join(" ");
+      h+=`<button class="${cls}" data-goto="${n}" aria-label="Dia ${n}, ${fmt(dDate(n))}: ${a} de ${b} metas"><span class="fill" style="height:${p*100}%"></span>${mk?`<span class="mk" style="background:${mk}"></span>`:""}<span class="mono">${n}</span></button>`;
+    }
+    h+=`<span class="subjs">${subj}</span></div>`;
+  }
+  $("journey").innerHTML=h;
+  $("jRange").textContent=`${fmt(dDate(1))} a ${fmt(dDate(70))}`;
+  const full=Array.from({length:70},(_,i)=>dayProg(i+1)).filter(([a,b])=>a===b).length;
+  $("jChip").textContent=`${full} de 70 dias completos`;
+}
+
+/* ---------- DESEMPENHO ---------- */
+function renderStats(){
+  const done=ALL.filter(i=>S.c[i.id]).length;
+  $("kG").textContent=Math.round(done/ALL.length*100)+"%";$("kGs").textContent=`${done} de ${ALL.length} metas`;
+  let q=0,m=0,days=0;for(let n=1;n<=70;n++){const v=S.lg[n];if(!v)continue;q+=+v.q||0;m+=+v.m||0;if((+v.q||0)+(+v.m||0))days++;}
+  $("kQ").textContent=q.toLocaleString("pt-BR");$("kQs").textContent=days?`média de ${Math.round(q/days)} por dia`:"resolvidas";
+  $("kH").textContent=(m/60).toFixed(1).replace(".",",").replace(",0","");$("kHs").textContent=days?`média de ${fmtMin(Math.round(m/days))} por dia`:"estudadas";
+  let st=0,n=clampN(todayN());if(!active(n))n--;while(n>=1&&active(n)){st++;n--;}
+  $("kS").textContent=st;$("kSs").textContent=st===1?"dia seguido":"dias seguidos";
+  // gráfico semanal
+  const wq=Array.from({length:10},(_,w)=>{let s=0;for(let d=1;d<=7;d++)s+=+(S.lg[w*7+d]?.q)||0;return s;});
+  const W=640,H=200,pl=36,pr=8,pt=12,pb=26,ref=200;
+  const max=Math.max(ref,...wq), nice=Math.ceil(max/100)*100;
+  const bw=(W-pl-pr)/10, y=v=>pt+(H-pt-pb)*(1-v/nice);
+  let g="";for(let t=0;t<=nice;t+=nice/4){g+=`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${y(t)}" y2="${y(t)}"/><text x="${pl-6}" y="${y(t)+4}" text-anchor="end">${t}</text>`;}
+  const tw=wOf(clampN(todayN()));
+  wq.forEach((v,i)=>{const x=pl+i*bw+bw*.18,w=bw*.64;
+    g+=`<rect x="${x}" y="${y(v)}" width="${w}" height="${Math.max(0,y(0)-y(v))}" rx="4" fill="${i===tw?"var(--accent)":"var(--g2)"}"/>`;
+    if(v)g+=`<text x="${x+w/2}" y="${y(v)-5}" text-anchor="middle" style="fill:var(--ink)">${v}</text>`;
+    g+=`<text x="${x+w/2}" y="${H-8}" text-anchor="middle">S${i+1}</text>`;});
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(ref)}" y2="${y(ref)}" stroke="var(--gold)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${W-pr}" y="${y(ref)-6}" text-anchor="end" style="fill:var(--gold)">meta 200</text>`;
+  $("wkChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Questões resolvidas por semana">${g}</svg>`;
+  // por matéria
+  const per={};ALL.forEach(i=>{if(!i.s)return;per[i.s]=per[i.s]||[0,0];per[i.s][1]++;if(S.c[i.id])per[i.s][0]++;});
+  $("subjBars").innerHTML=Object.keys(GROUP).filter(s=>per[s]).map(s=>{const [a,b]=per[s],p=a/b;return `<div class="sbar"><span>${s}</span><div class="tr"><span style="width:${p*100}%;background:${gcol(s)}"></span></div><span class="pc">${a}/${b}</span></div>`;}).join("");
+  $("distBars").innerHTML=DIST.map(([s,q,gr,out])=>`<div class="sbar${out?" out":""}"><span>${s}</span><div class="tr"><span style="width:${q/8*100}%;background:${out?"var(--line)":["var(--gold)","var(--g1)","var(--g2)","var(--g3)"][gr]}"></span></div><span class="pc">${q}${out?" · fora":""}</span></div>`).join("");
+}
+
+/* ---------- LEI SECA ---------- */
+function lawBlocks(){return LAWS.map(([name,ab,b,extra])=>{const bl=[];for(let i=0;i<b.length-1;i++)bl.push([`${ab}-${i}`,LAW_LABEL[b[i]]||`${b[i]}–${b[i+1]-1}`]);(extra||[]).forEach((e,i)=>bl.push([`${ab}-x${i}`,e]));return [name,ab,bl];});}
+function renderLaws(){
+  const L=lawBlocks();let tot=0,on=0;
+  $("laws").innerHTML=L.map(([name,ab,bl])=>{const d=bl.filter(([k])=>S.l[k]).length;tot+=bl.length;on+=d;
+    return `<article class="card"><div class="law-top">${smallRing(d/bl.length)}<div><h3>${esc(name)}</h3><span class="muted" style="font-size:13px">${d} de ${bl.length} blocos lidos</span></div></div><div class="blocks">${bl.map(([k,l])=>`<button class="blk" data-law="${k}" aria-pressed="${!!S.l[k]}" aria-label="${esc(name)}, artigos ${esc(l)}">${esc(l)}</button>`).join("")}</div></article>`;}).join("");
+  $("lChip").textContent=`${Math.round(on/tot*100)}% lido`;
+}
+
+/* ---------- Navegação ---------- */
+const VIEWS=["dia","jornada","desempenho","lei","metodo"];
+function go(v,push=true){
+  if(!VIEWS.includes(v))v="dia";
+  VIEWS.forEach(x=>{$("v-"+x).hidden=x!==v;});
+  document.querySelectorAll(".tab").forEach(t=>{if(t.dataset.view===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current");});
+  if(v==="jornada")renderJourney();if(v==="desempenho")renderStats();if(v==="lei")renderLaws();if(v==="dia")renderDay();
+  if(push)try{history.replaceState(null,"","#"+v);}catch(e){}
+  window.scrollTo({top:0});
+}
+let tt;function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200);}
+
+document.addEventListener("click",e=>{
+  const tab=e.target.closest(".tab");if(tab){go(tab.dataset.view);return;}
+  const tk=e.target.closest(".task");
+  if(tk){const k=tk.dataset.k;S.c[k]=!S.c[k];save();
+    const [a0,b0]=dayProg(sel);
+    renderDayHead();renderGoals();renderStrip();
+    const nb=document.querySelector(`.task[data-k="${k}"]`);nb&&nb.focus();
+    if(S.c[k]&&a0===b0)toast("Dia completo. Mais perto da aprovação!");
+    return;}
+  const dp=e.target.closest("[data-day]");if(dp){sel=+dp.dataset.day;renderDay();return;}
+  const gt=e.target.closest("[data-goto]");if(gt){sel=+gt.dataset.goto;go("dia");return;}
+  const inc=e.target.closest("[data-inc]");
+  if(inc){const v=lg(sel),f=inc.dataset.inc;v[f]=Math.max(0,(+v[f]||0)+(+inc.dataset.v));save();renderLog();return;}
+  const lb=e.target.closest(".blk");if(lb){const k=lb.dataset.law;S.l[k]=!S.l[k];save();renderLaws();document.querySelector(`[data-law="${k}"]`)?.focus();return;}
+  const pr=e.target.closest(".preset");if(pr&&!T.running&&!T.elapsed){T.total=+pr.dataset.min*60;document.querySelectorAll(".preset").forEach(p=>p.setAttribute("aria-pressed",p===pr));tRender();return;}
+});
+$("prevW").addEventListener("click",()=>{sel=clampN(sel-7);renderDay();});
+$("nextW").addEventListener("click",()=>{sel=clampN(sel+7);renderDay();});
+document.addEventListener("keydown",e=>{
+  if($("v-dia").hidden||e.target.matches("input,textarea"))return;
+  if(e.key==="ArrowLeft"&&sel>1){sel--;renderDay();}
+  if(e.key==="ArrowRight"&&sel<70){sel++;renderDay();}
+});
+/* deslizar entre dias no celular */
+let sx=null,sy=null;
+$("v-dia").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+$("v-dia").addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){const nn=clampN(sel+(dx<0?1:-1));if(nn!==sel){sel=nn;renderDay();}}},{passive:true});
+
+/* ---------- Cronômetro ---------- */
+const T={total:50*60,elapsed:0,running:false,t0:0,base:0,iv:null};
+function tRender(){
+  const left=Math.max(0,T.total-T.elapsed);
+  $("tDisp").textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0");
+  $("tBar").style.width=(T.elapsed/T.total*100)+"%";
+  $("tStart").textContent=T.running?"Pausar":T.elapsed?"Continuar":"Iniciar";
+  $("tDone").disabled=!T.elapsed;
+}
+function tick(){T.elapsed=Math.min(T.total,T.base+Math.floor((Date.now()-T.t0)/1000));tRender();if(T.elapsed>=T.total)finish(true);}
+$("tStart").addEventListener("click",()=>{
+  if(T.running){T.running=false;clearInterval(T.iv);T.base=T.elapsed;$("tNote").textContent="Pausado.";}
+  else{T.running=true;T.t0=Date.now();T.base=T.elapsed;T.iv=setInterval(tick,1000);$("tNote").textContent=`Estudando o dia ${sel}. Celular longe!`;}
+  tRender();
+});
+$("tDone").addEventListener("click",()=>finish(false));
+function finish(auto){
+  clearInterval(T.iv);T.running=false;const min=Math.round(T.elapsed/60);
+  if(min>0){const v=lg(sel);v.m=(+v.m||0)+min;save();renderLog();}
+  $("tNote").textContent=min>0?`${fmtMin(min)} somados ao dia ${sel}.${auto?" Hora do intervalo de 10 a 15 min.":""}`:"Sessão curta demais para registrar.";
+  if(min>0)toast(auto?"Sessão concluída. Faça uma pausa!":`${fmtMin(min)} registrados`);
+  T.elapsed=0;T.base=0;tRender();
+}
+
+/* ---------- Ajustes e backup ---------- */
+$("startDate").value=S.start;
+$("startDate").addEventListener("change",e=>{if(!e.target.value)return;S.start=e.target.value;save();sel=clampN(todayN());$("cd").textContent=daysLeft();toast("Datas atualizadas");});
+$("bkCopy").addEventListener("click",()=>{
+  const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("bkText").value=code;
+  const fb=()=>{$("bkText").select();toast("Código selecionado. Copie com Ctrl+C.");};
+  if(navigator.clipboard)navigator.clipboard.writeText(code).then(()=>toast("Código copiado")).catch(fb);else fb();
+});
+$("bkLoad").addEventListener("click",()=>{
+  try{const o=JSON.parse(decodeURIComponent(escape(atob($("bkText").value.trim()))));if(!o||!o.c)throw 0;
+    S=Object.assign({c:{},l:{},lg:{},start:DEFAULT_START},o);save();$("startDate").value=S.start;sel=clampN(todayN());toast("Progresso restaurado");}
+  catch(err){toast("Código inválido. Copie o código inteiro e tente de novo.");}
+});
+
+const daysLeft=()=>{const t=new Date();t.setHours(0,0,0,0);return Math.max(0,Math.round((EXAM-t)/864e5));};
+$("cd").textContent=daysLeft();
+tRender();
+go((location.hash||"").slice(1)||"dia",false);
+</script>
+
+</body>
+</html>
